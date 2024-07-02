@@ -1,5 +1,9 @@
+using API_Metadata.Models_DB;
+using Data;
+using Domain;
+using Microsoft.EntityFrameworkCore;
 
-namespace PersonalWebsite_API
+namespace API_PersonalWebsite_CK
 {
     public class Program
     {
@@ -13,6 +17,9 @@ namespace PersonalWebsite_API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<IAzureDB, AzureDB>();
+            builder.Services.AddDbContext<WebsiteDB_Context>(options => options.UseSqlServer(Utility.GetSqlConnection(builder.Configuration)));
 
             var app = builder.Build();
 
