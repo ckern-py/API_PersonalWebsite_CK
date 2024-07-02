@@ -9,7 +9,7 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["PersonalWebsite_API/PersonalWebsite_API.csproj", "PersonalWebsite_API/"]
+COPY ["PersonalWebsite_API/PersonalWebsite_API.csproj", "."]
 RUN dotnet restore "./PersonalWebsite_API/PersonalWebsite_API.csproj"
 COPY . .
 WORKDIR "/src/PersonalWebsite_API"
