@@ -54,6 +54,7 @@ namespace PersonalWebsite_API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in CheckHealthDB");
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = APIConstants.ResponseMessages.Failure;
             }
             return new JsonResult(response);
