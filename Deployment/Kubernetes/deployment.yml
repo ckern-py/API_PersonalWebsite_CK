@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ck-website-api
+  namespace: ck-website-api
+  labels:
+    app: ck-website-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ck-website-api
+  template:
+    metadata:
+      labels:
+        app: ck-website-api
+    spec:
+      containers:
+        - name: ck-website-api
+          image: __REPOSITORY_IMAGE__
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 20m
+              memory: 20Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: ck-website-api-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ck-website-api
+  namespace: ck-website-api
+  labels:
+    app: ck-website-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: ck-website-api
