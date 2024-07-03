@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ck-website-api-configmap
+  namespace: ck-website-api
+data:
+  SQL_SERVER: "__GetFromPortal__"
+  SQL_DATABASE: "__GetFromPortal__"
+  USER_ID: "__GetFromPortal__"
+  USER_PASSWORD: "__GetFromPortal__"
