@@ -26,6 +26,7 @@ namespace PersonalWebsite_API.Controllers
             DateTime startDT = DateTime.UtcNow;
             string errorMessage = string.Empty;
             BaseResponse response = new();
+
             try
             {
                 _logger.LogInformation("Begin InsertPageVisit");
@@ -62,6 +63,7 @@ namespace PersonalWebsite_API.Controllers
                 logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
                 _azureDB.InsertAPILog(logRequest);
             }
+
             return new JsonResult(response);
         }
     }

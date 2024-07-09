@@ -1,4 +1,6 @@
 ﻿using API_Metadata.Models_API;
+using API_Metadata.Models_DB;
+using Data;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -21,7 +23,10 @@ namespace PersonalWebsite_API.Controllers
         [HttpGet]
         public JsonResult CheckHealth()
         {
+            DateTime startDT = DateTime.UtcNow;
+            string errorMessage = string.Empty;
             BaseResponse response = new();
+
             try
             {
                 _logger.LogInformation("Begin CheckHealth");
@@ -31,17 +36,31 @@ namespace PersonalWebsite_API.Controllers
             }
             catch (Exception ex)
             {
+                errorMessage = ex.Message;
                 _logger.LogError(ex, "Error in CheckHealth");
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = APIConstants.ResponseMessages.Failure;
             }
+            finally
+            {
+                ApiLogging logRequest = Utility.BasicLogRequest();
+                logRequest.ApiMethod = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                logRequest.RequestingStartDt = startDT;
+                logRequest.ErrorMessage = errorMessage;
+                logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
+                _azureDB.InsertAPILog(logRequest);
+            }
+
             return new JsonResult(response);
         }
 
         [HttpGet]
         public JsonResult CheckHealthDB()
         {
+            DateTime startDT = DateTime.UtcNow;
+            string errorMessage = string.Empty;
             BaseResponse response = new();
+
             try
             {
                 _logger.LogInformation("Begin CheckHealthDB");
@@ -53,10 +72,21 @@ namespace PersonalWebsite_API.Controllers
             }
             catch (Exception ex)
             {
+                errorMessage = ex.Message;
                 _logger.LogError(ex, "Error in CheckHealthDB");
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = APIConstants.ResponseMessages.Failure;
             }
+            finally
+            {
+                ApiLogging logRequest = Utility.BasicLogRequest();
+                logRequest.ApiMethod = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                logRequest.RequestingStartDt = startDT;
+                logRequest.ErrorMessage = errorMessage;
+                logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
+                _azureDB.InsertAPILog(logRequest);
+            }
+
             return new JsonResult(response);
         }
     }
