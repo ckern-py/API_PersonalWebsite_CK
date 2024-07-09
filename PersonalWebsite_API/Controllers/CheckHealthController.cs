@@ -1,7 +1,7 @@
 ﻿using API_Metadata.Models_API;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Domain;
 
 namespace PersonalWebsite_API.Controllers
 {
