@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\API_Metadata\API_Metadata.csproj" />
+  </ItemGroup>
+
 </Project>

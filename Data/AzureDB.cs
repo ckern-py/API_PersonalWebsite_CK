@@ -30,5 +30,10 @@ namespace Data
             _context.PageVisits.Add(page);
             return _context.SaveChanges();
         }
+
+        public void InsertAPILog(ApiLogging logReq)
+        {
+
+        }
     }
 }
