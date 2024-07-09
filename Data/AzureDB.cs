@@ -18,5 +18,17 @@ namespace Data
             _context.Database.OpenConnection();
             _context.Database.CloseConnection();
         }
+
+        public int InsertPageVisit(string pageName)
+        {
+            PageVisit page = new PageVisit()
+            {
+                PageName = pageName,
+                VisitDt = DateTime.UtcNow
+            };
+
+            _context.PageVisits.Add(page);
+            return _context.SaveChanges();
+        }
     }
 }

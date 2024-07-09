@@ -1,7 +1,10 @@
-﻿namespace API_Metadata.Models_API
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace API_Metadata.Models_API
 {
     public class BaseRequest
     {
-        public required string BaseReqeust { get; set; }
+        [Required]
+        public required string RequestingSystem { get; set; }
     }
 }

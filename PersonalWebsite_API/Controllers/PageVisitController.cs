@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API_Metadata.Models_API;
+using Domain;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace PersonalWebsite_API.Controllers
 {
@@ -7,16 +10,43 @@ namespace PersonalWebsite_API.Controllers
     public class PageVisitController : Controller
     {
         private readonly ILogger<PageVisitController> _logger;
+        private readonly IAzureDB _azureDB;
 
-        public PageVisitController(ILogger<PageVisitController> logger)
+        public PageVisitController(ILogger<PageVisitController> logger, IAzureDB azuredb)
         {
             _logger = logger;
+            _azureDB = azuredb;
         }
 
-        [HttpPost(Name = "InsertPageVisit")]
-        public void InsertPageVisit()
+        [HttpPost]
+        public JsonResult InsertPageVisit(InsertPageVisitRequest pageRequest)
         {
+            BaseResponse response = new();
+            try
+            {
+                _logger.LogInformation("Begin InsertPageVisit");
+                int inserted = _azureDB.InsertPageVisit(pageRequest.PageName);
 
+                if (inserted > 0)
+                {
+                    response.Status = APIConstants.ResponseMessages.Success;
+                    HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+                    _logger.LogInformation("End InsertPageVisit");
+                }
+                else
+                {
+                    _logger.LogInformation("Page Insert Failed");
+                    HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    response.Status = APIConstants.ResponseMessages.Failure;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in InsertPageVisit");
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                response.Status = APIConstants.ResponseMessages.Failure;
+            }
+            return new JsonResult(response);
         }
     }
 }
