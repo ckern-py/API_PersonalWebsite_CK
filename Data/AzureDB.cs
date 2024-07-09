@@ -27,8 +27,14 @@ namespace Data
                 VisitDt = DateTime.UtcNow
             };
 
-            _context.PageVisits.Add(page);
+            _context.Add(page);
             return _context.SaveChanges();
+        }
+
+        public void InsertAPILog(ApiLogging logReq)
+        {
+            _context.Add(logReq);
+            _context.SaveChanges();
         }
     }
 }

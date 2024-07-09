@@ -1,7 +1,12 @@
 ﻿using API_Metadata.Models_API;
+using API_Metadata.Models_DB;
+using Data;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Newtonsoft.Json;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace PersonalWebsite_API.Controllers
 {
@@ -19,9 +24,12 @@ namespace PersonalWebsite_API.Controllers
         }
 
         [HttpGet]
-        public JsonResult CheckHealth()
+        public JsonResult CheckHealth(BaseRequest request)
         {
+            DateTime startDT = DateTime.UtcNow;
+            string errorMessage = string.Empty;
             BaseResponse response = new();
+
             try
             {
                 _logger.LogInformation("Begin CheckHealth");
@@ -31,17 +39,34 @@ namespace PersonalWebsite_API.Controllers
             }
             catch (Exception ex)
             {
+                errorMessage = ex.Message;
                 _logger.LogError(ex, "Error in CheckHealth");
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = APIConstants.ResponseMessages.Failure;
             }
+            finally
+            {
+                ApiLogging logRequest = Utility.BasicLogRequest();
+                logRequest.RequestingSystem = request.RequestingSystem;
+                logRequest.ApiMethod = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                logRequest.RequestingStartDt = startDT;
+                logRequest.ErrorMessage = errorMessage;
+                logRequest.RequestMessage = JsonConvert.SerializeObject(request);
+                logRequest.ResponseMessage = JsonConvert.SerializeObject(response);
+                logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
+                _azureDB.InsertAPILog(logRequest);
+            }
+
             return new JsonResult(response);
         }
 
         [HttpGet]
-        public JsonResult CheckHealthDB()
+        public JsonResult CheckHealthDB(BaseRequest request)
         {
+            DateTime startDT = DateTime.UtcNow;
+            string errorMessage = string.Empty;
             BaseResponse response = new();
+
             try
             {
                 _logger.LogInformation("Begin CheckHealthDB");
@@ -53,10 +78,24 @@ namespace PersonalWebsite_API.Controllers
             }
             catch (Exception ex)
             {
+                errorMessage = ex.Message;
                 _logger.LogError(ex, "Error in CheckHealthDB");
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = APIConstants.ResponseMessages.Failure;
             }
+            finally
+            {
+                ApiLogging logRequest = Utility.BasicLogRequest();
+                logRequest.RequestingSystem = request.RequestingSystem;
+                logRequest.ApiMethod = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                logRequest.RequestingStartDt = startDT;
+                logRequest.ErrorMessage = errorMessage;
+                logRequest.RequestMessage = JsonConvert.SerializeObject(request);
+                logRequest.ResponseMessage = JsonConvert.SerializeObject(response);
+                logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
+                _azureDB.InsertAPILog(logRequest);
+            }
+
             return new JsonResult(response);
         }
     }

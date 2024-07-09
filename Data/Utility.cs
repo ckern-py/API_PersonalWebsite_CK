@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using API_Metadata.Models_DB;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
 namespace Data
@@ -16,6 +17,15 @@ namespace Data
             };
 
             return builder.ToString();
+        }
+
+        public static ApiLogging BasicLogRequest()
+        {
+            return new ApiLogging
+            {
+                ApplicationName = "API_PersonalWebsite_CK",
+                RequestingEndDt = DateTime.UtcNow
+            };
         }
     }
 }
