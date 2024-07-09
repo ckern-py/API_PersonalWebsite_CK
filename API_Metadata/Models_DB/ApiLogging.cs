@@ -39,12 +39,12 @@ public partial class ApiLogging
     [Column("Error_Message")]
     [StringLength(5000)]
     [Unicode(false)]
-    public string ErrorMessage { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
 
     [Column("Request_Message")]
     [StringLength(5000)]
     [Unicode(false)]
-    public string RequestMessage { get; set; }
+    public string RequestMessage { get; set; } = string.Empty;
 
     [Column("Response_Message")]
     [StringLength(5000)]
@@ -54,12 +54,12 @@ public partial class ApiLogging
     [Column("Debug_1")]
     [StringLength(5000)]
     [Unicode(false)]
-    public string Debug1 { get; set; }
+    public string Debug1 { get; set; } = string.Empty;
 
     [Column("Debug_2")]
     [StringLength(5000)]
     [Unicode(false)]
-    public string Debug2 { get; set; }
+    public string Debug2 { get; set; } = string.Empty;
 
     [Column("Return_Code")]
     [StringLength(100)]

@@ -1,8 +1,10 @@
 ﻿using API_Metadata.Models_API;
 using API_Metadata.Models_DB;
+using Azure.Core;
 using Data;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace PersonalWebsite_API.Controllers
@@ -59,7 +61,8 @@ namespace PersonalWebsite_API.Controllers
                 logRequest.ApiMethod = System.Reflection.MethodBase.GetCurrentMethod().Name;
                 logRequest.RequestingStartDt = startDT;
                 logRequest.ErrorMessage = errorMessage;
-                logRequest.RequestMessage = pageRequest.ToString();
+                logRequest.RequestMessage = JsonConvert.SerializeObject(pageRequest);
+                logRequest.ResponseMessage = JsonConvert.SerializeObject(response);
                 logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
                 _azureDB.InsertAPILog(logRequest);
             }
