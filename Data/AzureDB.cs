@@ -1,4 +1,5 @@
-﻿using API_Metadata.Models_DB;
+﻿using API_Metadata.Models_API;
+using API_Metadata.Models_DB;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +36,26 @@ namespace Data
         {
             _context.Add(logReq);
             _context.SaveChanges();
+        }
+
+        public List<GitHubProjects> GetGitHubProjects()
+        {
+            List<GitHubProjects> projectList = new List<GitHubProjects>();
+            
+            projectList = _context.GitHubs
+                .Where(p => p.DisplayOnline == true)
+                .OrderBy(a => a.DisplayOrder)
+                .ThenBy(b => b.GitHubId)
+                .Select(g => new GitHubProjects
+            {
+                ImageSource = g.ImageSource,
+                ImageAlt = g.ImageAlt,
+                SectionTitle = g.SectionTitle,
+                SectionDescription = g.SectionDescription,
+                RepoLink = g.RepoLink
+            }).ToList();
+
+            return projectList;
         }
     }
 }

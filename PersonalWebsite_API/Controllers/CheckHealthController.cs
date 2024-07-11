@@ -3,10 +3,8 @@ using API_Metadata.Models_DB;
 using Data;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.Json;
 using Newtonsoft.Json;
 using System.Net;
-using System.Text.Json.Serialization;
 
 namespace PersonalWebsite_API.Controllers
 {

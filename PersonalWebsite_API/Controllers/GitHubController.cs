@@ -10,57 +10,49 @@ namespace PersonalWebsite_API.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    public class PageVisitController : Controller
+    public class GitHubController : Controller
     {
-        private readonly ILogger<PageVisitController> _logger;
+        private readonly ILogger<GitHubController> _logger;
         private readonly IAzureDB _azureDB;
 
-        public PageVisitController(ILogger<PageVisitController> logger, IAzureDB azuredb)
+        public GitHubController(ILogger<GitHubController> logger, IAzureDB azuredb)
         {
             _logger = logger;
             _azureDB = azuredb;
         }
 
         [HttpPost]
-        public JsonResult InsertPageVisit(InsertPageVisitRequest pageRequest)
+        public JsonResult GetGitHubProjects(BaseRequest projectRequest)
         {
             DateTime startDT = DateTime.UtcNow;
             string errorMessage = string.Empty;
-            BaseResponse response = new();
+            GitHubProjectsResponse response = new();
 
             try
             {
-                _logger.LogInformation("Begin InsertPageVisit");
-                int inserted = _azureDB.InsertPageVisit(pageRequest.PageName);
+                _logger.LogInformation("Begin GetGitHubProjects");
+                response.GitHubProjects = _azureDB.GetGitHubProjects();
 
-                if (inserted > 0)
-                {
-                    response.Status = APIConstants.ResponseMessages.Success;
-                    HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
-                    _logger.LogInformation("End InsertPageVisit");
-                }
-                else
-                {
-                    _logger.LogInformation("Page Insert Failed");
-                    HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    response.Status = APIConstants.ResponseMessages.Failure;
-                }
+                response.Status = APIConstants.ResponseMessages.Success;
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+                _logger.LogInformation("End GetGitHubProjects");
+
             }
             catch (Exception ex)
             {
                 errorMessage = ex.Message;
-                _logger.LogError(ex, "Error in InsertPageVisit");
+                _logger.LogError(ex, "Error in GetGitHubProjects");
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 response.Status = APIConstants.ResponseMessages.Failure;
             }
             finally
             {
                 ApiLogging logRequest = Utility.BasicLogRequest();
-                logRequest.RequestingSystem = pageRequest.RequestingSystem;
+                logRequest.RequestingSystem = projectRequest.RequestingSystem;
                 logRequest.ApiMethod = System.Reflection.MethodBase.GetCurrentMethod().Name;
                 logRequest.RequestingStartDt = startDT;
                 logRequest.ErrorMessage = errorMessage;
-                logRequest.RequestMessage = JsonConvert.SerializeObject(pageRequest);
+                logRequest.RequestMessage = JsonConvert.SerializeObject(projectRequest);
                 logRequest.ResponseMessage = JsonConvert.SerializeObject(response);
                 logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
                 _azureDB.InsertAPILog(logRequest);
