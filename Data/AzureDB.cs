@@ -45,6 +45,7 @@ namespace Data
             projectList = _context.GitHubs
                 .Where(p => p.DisplayOnline == true)
                 .OrderBy(a => a.DisplayOrder)
+                .ThenBy(b => b.GitHubId)
                 .Select(g => new GitHubProjects
             {
                 ImageSource = g.ImageSource,
