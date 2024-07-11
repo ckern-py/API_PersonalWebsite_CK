@@ -1,6 +1,5 @@
 ﻿using API_Metadata.Models_API;
 using API_Metadata.Models_DB;
-using Azure.Core;
 using Data;
 using Domain;
 using Microsoft.AspNetCore.Mvc;

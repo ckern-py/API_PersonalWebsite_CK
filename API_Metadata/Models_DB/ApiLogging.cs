@@ -47,7 +47,7 @@ public partial class ApiLogging
     public string RequestMessage { get; set; } = string.Empty;
 
     [Column("Response_Message")]
-    [StringLength(5000)]
+    [StringLength(8000)]
     [Unicode(false)]
     public string ResponseMessage { get; set; }
 
