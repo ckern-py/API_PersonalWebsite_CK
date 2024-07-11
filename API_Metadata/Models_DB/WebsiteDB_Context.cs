@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using API_Metadata.Models_DB2;
 using Microsoft.EntityFrameworkCore;
 
 namespace API_Metadata.Models_DB;
@@ -20,6 +21,8 @@ public partial class WebsiteDB_Context : DbContext
 
     public virtual DbSet<ApiLogging> ApiLoggings { get; set; }
 
+    public virtual DbSet<GitHub> GitHubs { get; set; }
+
     public virtual DbSet<PageVisit> PageVisits { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,9 +34,14 @@ public partial class WebsiteDB_Context : DbContext
             entity.HasKey(e => e.TransactionId).HasName("PK__API_Logg__9A8D5625A01B4071");
         });
 
+        modelBuilder.Entity<GitHub>(entity =>
+        {
+            entity.HasKey(e => e.GitHubId).HasName("PK__GitHub__D1B1D1281D2DA2F9");
+        });
+
         modelBuilder.Entity<PageVisit>(entity =>
         {
-            entity.HasKey(e => e.PageVisitsId).HasName("PK__PageVisi__3C7AA9E37A384353");
+            entity.HasKey(e => e.PageVisitsId).HasName("PK__PageVisi__3C7AA9E3965D27FA");
         });
 
         OnModelCreatingPartial(modelBuilder);
