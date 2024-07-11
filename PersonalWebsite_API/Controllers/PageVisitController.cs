@@ -63,7 +63,7 @@ namespace PersonalWebsite_API.Controllers
                 logRequest.RequestMessage = JsonConvert.SerializeObject(pageRequest);
                 logRequest.ResponseMessage = JsonConvert.SerializeObject(response);
                 logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
-                _azureDB.InsertAPILog(logRequest);
+                Task.Run(() => _azureDB.InsertAPILog(logRequest));
             }
 
             return new JsonResult(response);

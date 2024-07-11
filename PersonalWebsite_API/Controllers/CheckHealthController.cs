@@ -52,7 +52,7 @@ namespace PersonalWebsite_API.Controllers
                 logRequest.RequestMessage = JsonConvert.SerializeObject(request);
                 logRequest.ResponseMessage = JsonConvert.SerializeObject(response);
                 logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
-                _azureDB.InsertAPILog(logRequest);
+                Task.Run(() => _azureDB.InsertAPILog(logRequest));
             }
 
             return new JsonResult(response);
@@ -91,7 +91,7 @@ namespace PersonalWebsite_API.Controllers
                 logRequest.RequestMessage = JsonConvert.SerializeObject(request);
                 logRequest.ResponseMessage = JsonConvert.SerializeObject(response);
                 logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
-                _azureDB.InsertAPILog(logRequest);
+                Task.Run(() => _azureDB.InsertAPILog(logRequest));
             }
 
             return new JsonResult(response);
