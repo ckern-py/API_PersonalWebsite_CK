@@ -7,11 +7,11 @@ namespace Data
 {
     public class AzureDB : IAzureDB
     {
-        private readonly WebsiteDB_Context _context;
+        protected readonly WebsiteDB_Context _context;
 
-        public AzureDB(DbContextOptions<WebsiteDB_Context> option)
+        public AzureDB(WebsiteDB_Context context)
         {
-            _context = new WebsiteDB_Context(option);
+            _context = context;
         }
 
         public void CheckDBHealth()
