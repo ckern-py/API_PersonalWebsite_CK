@@ -55,15 +55,22 @@ namespace PersonalWebsite_API.Controllers
             }
             finally
             {
-                ApiLogging logRequest = Utility.BasicLogRequest();
-                logRequest.RequestingSystem = pageRequest.RequestingSystem;
-                logRequest.ApiMethod = System.Reflection.MethodBase.GetCurrentMethod().Name;
-                logRequest.RequestingStartDt = startDT;
-                logRequest.ErrorMessage = errorMessage;
-                logRequest.RequestMessage = JsonConvert.SerializeObject(pageRequest);
-                logRequest.ResponseMessage = JsonConvert.SerializeObject(response);
-                logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
-                Task.Run(() => _azureDB.InsertAPILog(logRequest));
+                try
+                {
+                    ApiLogging logRequest = Utility.BasicLogRequest();
+                    logRequest.RequestingSystem = pageRequest.RequestingSystem;
+                    logRequest.ApiMethod = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                    logRequest.RequestingStartDt = startDT;
+                    logRequest.ErrorMessage = errorMessage;
+                    logRequest.RequestMessage = JsonConvert.SerializeObject(pageRequest);
+                    logRequest.ResponseMessage = JsonConvert.SerializeObject(response);
+                    logRequest.ReturnCode = HttpContext.Response.StatusCode.ToString();
+                    _azureDB.InsertAPILog(logRequest);
+                }
+                catch (Exception)
+                {
+                    //catch so that failed logging doesn't change request response
+                }
             }
 
             return new JsonResult(response);
