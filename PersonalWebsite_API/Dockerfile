@@ -10,6 +10,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["PersonalWebsite_API/PersonalWebsite_API.csproj", "PersonalWebsite_API/"]
+COPY ["Data/Data.csproj", "Data/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
+COPY ["API_Metadata/API_Metadata.csproj", "API_Metadata/"]
 RUN dotnet restore "./PersonalWebsite_API/PersonalWebsite_API.csproj"
 COPY . .
 WORKDIR "/src/PersonalWebsite_API"
